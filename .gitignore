@@ -1,0 +1,102 @@
+# ============================================================
+# NEXUS INTERVIEW - .gitignore
+# Security-hardened for Python + API Keys + YubiKey
+# ============================================================
+
+# ---------------------------
+# Environment & Secrets
+# ---------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+secrets/
+config/secrets.yaml
+
+# ---------------------------
+# YubiKey & Hardware Security
+# ---------------------------
+*.ykp
+*.yks
+yubikey-config/
+gpg-agent.conf
+pubring.kbx
+trustdb.gpg
+*.gpg
+*.pgp
+secring.*
+private-keys-v1.d/
+openpgp-revocs.d/
+
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+*.egg
+dist/
+build/
+wheels/
+.eggs/
+
+# ---------------------------
+# Testing & Coverage
+# ---------------------------
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+*.coveragerc
+test-results/
+
+# ---------------------------
+# VS Code
+# ---------------------------
+.vscode/
+*.code-workspace
+.history/
+
+# ---------------------------
+# OS Files
+# ---------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---------------------------
+# Logs & Databases
+# ---------------------------
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+logs/
+
+# ---------------------------
+# Node (if frontend grows)
+# ---------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ---------------------------
+# Anthropic API
+# ---------------------------
+anthropic_key.txt
+api_keys.txt
