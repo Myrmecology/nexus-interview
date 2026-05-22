@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Nexus Interview</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- ===================== BOOT SCREEN ===================== -->
+    <div id="boot-screen">
+        <div class="boot-content">
+            <div class="boot-logo">NX</div>
+            <div class="boot-title">NEXUS INTERVIEW</div>
+            <div class="boot-sub">AI SYSTEM DESIGN SIMULATOR</div>
+            <div class="boot-bar-wrap">
+                <div class="boot-bar"></div>
+            </div>
+            <div class="boot-status" id="boot-status">INITIALIZING SYSTEMS...</div>
+        </div>
+    </div>
+
+    <!-- ===================== MAIN APP ===================== -->
+    <div id="app" class="hidden">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo-mark">NX</span>
+                <span class="logo-text">NEXUS</span>
+            </div>
+            <div class="header-center" id="session-info">
+                <span class="session-topic" id="header-topic">—</span>
+            </div>
+            <div class="header-right">
+                <div class="turn-tracker">
+                    <span class="turn-label">TURNS</span>
+                    <span class="turn-count" id="turn-count">0/10</span>
+                </div>
+                <div class="status-dot" id="status-dot"></div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="main-layout">
+
+            <!-- Left Panel — Setup -->
+            <aside class="panel panel-left" id="setup-panel">
+                <div class="panel-label">CONFIGURATION</div>
+
+                <div class="field-group">
+                    <label class="field-label">DIFFICULTY</label>
+                    <div class="difficulty-grid">
+                        <button class="diff-btn active" data-level="beginner">BEGINNER</button>
+                        <button class="diff-btn" data-level="intermediate">MID</button>
+                        <button class="diff-btn" data-level="advanced">ADVANCED</button>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">TOPIC <span class="optional">(OPTIONAL)</span></label>
+                    <input
+                        type="text"
+                        id="topic-input"
+                        class="topic-input"
+                        placeholder="e.g. URL shortener"
+                    />
+                </div>
+
+                <button class="start-btn" id="start-btn">
+                    <span class="start-btn-text">INITIATE SESSION</span>
+                    <span class="start-btn-icon">→</span>
+                </button>
+
+                <!-- Score Panel — shown after scoring -->
+                <div class="score-panel hidden" id="score-panel">
+                    <div class="panel-label">EVALUATION</div>
+                    <div class="score-grid">
+                        <div class="score-item">
+                            <span class="score-label">SCALABILITY</span>
+                            <span class="score-val" id="score-scalability">—</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">RELIABILITY</span>
+                            <span class="score-val" id="score-reliability">—</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">COMMUNICATION</span>
+                            <span class="score-val" id="score-communication">—</span>
+                        </div>
+                        <div class="score-item highlight">
+                            <span class="score-label">OVERALL</span>
+                            <span class="score-val" id="score-overall">—</span>
+                        </div>
+                    </div>
+                    <div class="score-feedback" id="score-feedback"></div>
+                    <div class="score-tags" id="score-strengths"></div>
+                    <div class="score-tags improvements" id="score-improvements"></div>
+                    <button class="restart-btn" id="restart-btn">NEW SESSION →</button>
+                </div>
+
+            </aside>
+
+            <!-- Center Panel — Chat -->
+            <section class="panel panel-center">
+                <div class="chat-window" id="chat-window">
+                    <div class="chat-placeholder" id="chat-placeholder">
+                        <div class="placeholder-icon">⬡</div>
+                        <div class="placeholder-text">
+                            Configure your session and hit<br/>
+                            <strong>INITIATE SESSION</strong> to begin.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <textarea
+                        id="user-input"
+                        class="user-input"
+                        placeholder="Respond to Nexus..."
+                        rows="3"
+                        disabled
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="hint-btn" id="hint-btn" disabled>
+                            HINT
+                        </button>
+                        <button class="score-btn" id="score-btn" disabled>
+                            SCORE ME
+                        </button>
+                        <button class="send-btn" id="send-btn" disabled>
+                            SEND →
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel — Intel -->
+            <aside class="panel panel-right">
+                <div class="panel-label">INTEL FEED</div>
+                <div class="intel-feed" id="intel-feed">
+                    <div class="intel-item">
+                        <span class="intel-key">STATUS</span>
+                        <span class="intel-val" id="intel-status">OFFLINE</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">DIFFICULTY</span>
+                        <span class="intel-val" id="intel-difficulty">—</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">TOPIC</span>
+                        <span class="intel-val" id="intel-topic">—</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">SESSION ID</span>
+                        <span class="intel-val mono" id="intel-session">—</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">TURNS USED</span>
+                        <span class="intel-val" id="intel-turns">0 / 10</span>
+                    </div>
+                    <div class="intel-item">
+                        <span class="intel-key">MODEL</span>
+                        <span class="intel-val">CLAUDE SONNET 4</span>
+                    </div>
+                </div>
+
+                <div class="panel-label" style="margin-top: 2rem;">TIPS</div>
+                <ul class="tips-list">
+                    <li>Define requirements before diving in</li>
+                    <li>Think about scale from the start</li>
+                    <li>Address single points of failure</li>
+                    <li>Use HINT if you get stuck</li>
+                    <li>Hit SCORE ME when ready</li>
+                </ul>
+            </aside>
+
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
