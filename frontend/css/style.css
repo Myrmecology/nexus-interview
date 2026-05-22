@@ -6,6 +6,11 @@
 /* ---------------------------
    CSS Variables
    --------------------------- */
+
+html {
+    font-size: 20px;
+}
+
 :root {
     --bg:         #080b0f;
     --bg-panel:   #0d1117;
@@ -15,9 +20,9 @@
     --accent:     #00ffe0;
     --accent-dim: #00ffe022;
     --accent-2:   #ff4c6a;
-    --text:       #c9d8e8;
-    --text-dim:   #4a6278;
-    --text-muted: #2a3f52;
+    --text:       #ffcdd2;
+    --text-dim:   #ef9a9a;
+    --text-muted: #e57373;
     --nexus:      #00ffe0;
     --user:       #ff4c6a;
     --font-mono:  'Share Tech Mono', monospace;
@@ -197,6 +202,15 @@ html, body {
     border: 1px solid var(--accent);
     padding: 0.15rem 0.4rem;
     letter-spacing: 0.05em;
+    animation: logo-flicker 6s ease infinite;
+}
+
+@keyframes logo-flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96%            { opacity: 0.4; }
+    97%            { opacity: 1; }
+    98%            { opacity: 0.6; }
+    99%            { opacity: 1; }
 }
 
 .logo-text {
@@ -345,6 +359,21 @@ html, body {
     padding: 0.5rem 0.25rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.diff-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.diff-btn:hover::after {
+    opacity: 0.05;
 }
 
 .diff-btn:hover {
@@ -366,7 +395,7 @@ html, body {
     font-size: 0.75rem;
     padding: 0.6rem 0.75rem;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
 }
 
@@ -374,13 +403,17 @@ html, body {
 
 .topic-input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-dim);
+    box-shadow: 0 0 0 2px var(--accent-dim), 0 0 12px var(--accent-dim);
 }
 
+/* ---------------------------
+   Start Button — Star Burst Effect
+   --------------------------- */
 .start-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     background: var(--accent);
     border: none;
     color: var(--bg);
@@ -392,14 +425,115 @@ html, body {
     cursor: pointer;
     transition: all 0.2s ease;
     margin-top: auto;
+    overflow: visible;
+    isolation: isolate;
 }
 
 .start-btn:hover {
     background: #00ffd5;
-    box-shadow: 0 0 20px var(--accent);
+    box-shadow:
+        0 0 20px var(--accent),
+        0 0 40px var(--accent-dim),
+        0 0 80px var(--accent-dim);
+    transform: translateY(-1px);
 }
 
-.start-btn:active { transform: scale(0.98); }
+.start-btn:active {
+    transform: scale(0.97) translateY(0);
+}
+
+/* Star particles — 8 stars shooting in all directions */
+.start-btn .star {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fffde7;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow:
+        0 0 6px 2px #fffde7,
+        0 0 12px 4px #fff9c4;
+    transition: none;
+}
+
+/* Each star positioned at center of button */
+.start-btn .star:nth-child(1)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(2)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(3)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(4)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(5)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(6)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(7)  { top: 50%; left: 50%; }
+.start-btn .star:nth-child(8)  { top: 50%; left: 50%; }
+
+/* Stars burst outward on hover in 8 directions */
+.start-btn:hover .star:nth-child(1) {
+    animation: star-burst-1 0.6s ease-out forwards;
+}
+.start-btn:hover .star:nth-child(2) {
+    animation: star-burst-2 0.6s ease-out 0.05s forwards;
+}
+.start-btn:hover .star:nth-child(3) {
+    animation: star-burst-3 0.6s ease-out 0.1s forwards;
+}
+.start-btn:hover .star:nth-child(4) {
+    animation: star-burst-4 0.6s ease-out 0.05s forwards;
+}
+.start-btn:hover .star:nth-child(5) {
+    animation: star-burst-5 0.6s ease-out forwards;
+}
+.start-btn:hover .star:nth-child(6) {
+    animation: star-burst-6 0.6s ease-out 0.1s forwards;
+}
+.start-btn:hover .star:nth-child(7) {
+    animation: star-burst-7 0.6s ease-out 0.05s forwards;
+}
+.start-btn:hover .star:nth-child(8) {
+    animation: star-burst-8 0.6s ease-out forwards;
+}
+
+/* 8 directional burst animations */
+@keyframes star-burst-1 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% + 0px), calc(-50% - 55px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-2 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% + 39px), calc(-50% - 39px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-3 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% + 55px), calc(-50% + 0px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-4 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% + 39px), calc(-50% + 39px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-5 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% + 0px), calc(-50% + 55px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-6 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% - 39px), calc(-50% + 39px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-7 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% - 55px), calc(-50% + 0px)) scale(1.2); opacity: 0; }
+}
+@keyframes star-burst-8 {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(calc(-50% - 39px), calc(-50% - 39px)) scale(1.2); opacity: 0; }
+}
 
 /* ---------------------------
    Chat Window
@@ -426,6 +560,13 @@ html, body {
 .placeholder-icon {
     font-size: 2.5rem;
     color: var(--border);
+    animation: hex-spin 8s linear infinite;
+}
+
+@keyframes hex-spin {
+    0%   { transform: rotate(0deg) scale(1); color: var(--border); }
+    50%  { transform: rotate(180deg) scale(1.2); color: var(--accent-dim); }
+    100% { transform: rotate(360deg) scale(1); color: var(--border); }
 }
 
 .placeholder-text {
@@ -446,13 +587,13 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    animation: msg-in 0.3s ease;
+    animation: msg-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     max-width: 90%;
 }
 
 @keyframes msg-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .message.nexus { align-self: flex-start; }
@@ -476,11 +617,17 @@ html, body {
     background: var(--bg-panel);
     white-space: pre-wrap;
     word-break: break-word;
+    transition: border-color 0.3s ease;
 }
 
 .message.nexus .message-bubble {
     border-left: 2px solid var(--nexus);
     background: #0d1117;
+}
+
+.message.nexus .message-bubble:hover {
+    border-color: var(--nexus);
+    box-shadow: 0 0 12px var(--accent-dim);
 }
 
 .message.user .message-bubble {
@@ -507,6 +654,23 @@ html, body {
     gap: 0.75rem;
     background: var(--bg-panel);
     flex-shrink: 0;
+    position: relative;
+}
+
+.input-area::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--accent-2),
+        transparent
+    );
+    opacity: 0.3;
 }
 
 .user-input {
@@ -519,15 +683,15 @@ html, body {
     resize: none;
     outline: none;
     line-height: 1.6;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
 }
 
 .user-input::placeholder { color: var(--text-muted); }
 
 .user-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-dim);
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 2px #ff4c6a22, 0 0 12px #ff4c6a11;
 }
 
 .user-input:disabled {
@@ -550,6 +714,24 @@ html, body {
     background: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ripple effect on action buttons */
+.hint-btn::after,
+.score-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.hint-btn:hover::after,
+.score-btn:hover::after {
+    opacity: 0.06;
 }
 
 .hint-btn {
@@ -560,6 +742,7 @@ html, body {
 .hint-btn:hover:not(:disabled) {
     color: var(--accent);
     border-color: var(--accent);
+    box-shadow: 0 0 8px var(--accent-dim);
 }
 
 .score-btn {
@@ -570,6 +753,7 @@ html, body {
 .score-btn:hover:not(:disabled) {
     color: var(--accent-2);
     border-color: var(--accent-2);
+    box-shadow: 0 0 8px #ff4c6a22;
 }
 
 .send-btn {
@@ -581,7 +765,12 @@ html, body {
 }
 
 .send-btn:hover:not(:disabled) {
-    box-shadow: 0 0 16px var(--accent);
+    box-shadow: 0 0 16px var(--accent), 0 0 32px var(--accent-dim);
+    transform: translateY(-1px);
+}
+
+.send-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
 }
 
 .hint-btn:disabled,
@@ -606,6 +795,11 @@ html, body {
     gap: 0.2rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border);
+    transition: border-color 0.3s ease;
+}
+
+.intel-item:hover {
+    border-bottom-color: var(--accent);
 }
 
 .intel-key {
@@ -642,6 +836,14 @@ html, body {
     line-height: 1.5;
     padding-left: 0.75rem;
     border-left: 1px solid var(--border);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.tips-list li:hover {
+    border-left-color: var(--accent);
+    color: var(--text);
+    padding-left: 1rem;
 }
 
 /* ---------------------------
@@ -669,11 +871,22 @@ html, body {
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--border);
     background: var(--bg-input);
+    transition: all 0.2s ease;
+}
+
+.score-item:hover {
+    border-color: var(--accent);
 }
 
 .score-item.highlight {
     border-color: var(--accent);
     background: var(--accent-dim);
+    animation: score-pulse 2s ease infinite;
+}
+
+@keyframes score-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-dim); }
+    50%       { box-shadow: 0 0 12px 2px var(--accent-dim); }
 }
 
 .score-label {
@@ -715,6 +928,12 @@ html, body {
     background: var(--accent-dim);
     color: var(--text);
     letter-spacing: 0.05em;
+    animation: tag-slide 0.4s ease both;
+}
+
+@keyframes tag-slide {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
 }
 
 .improvements .score-tag {
@@ -731,8 +950,30 @@ html, body {
     letter-spacing: 0.2em;
     padding: 0.6rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.restart-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--accent-dim),
+        transparent
+    );
+    transition: left 0.4s ease;
+}
+
+.restart-btn:hover::before {
+    left: 100%;
 }
 
 .restart-btn:hover {
@@ -771,4 +1012,25 @@ body::before {
     );
     pointer-events: none;
     z-index: 9999;
+}
+
+/* ---------------------------
+   Corner Decoration — Panel Accents
+   --------------------------- */
+.panel-left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.5;
+}
+
+/* ---------------------------
+   Global Glow Pulse on Active Session
+   --------------------------- */
+.status-dot.active ~ * {
+    --glow: 0 0 30px var(--accent-dim);
 }
