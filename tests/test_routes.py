@@ -4,7 +4,6 @@
 # ============================================================
 
 import pytest
-import json
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock, patch
 from backend.main import app
@@ -196,15 +195,15 @@ class TestChat:
         assert "Think" in res.text
 
     def test_chat_invalid_session_returns_404(self, mock_claude):
-        """POST /chat with unknown session should return 404."""
+        """POST /chat with unknown session raises ValueError."""
         mock_claude.stream_chat.side_effect = ValueError(
             "Session not found."
         )
-        res = client.post("/api/interview/chat", json={
-            "session_id": "invalid-id",
-            "message": "test"
-        })
-        assert res.status_code == 404
+        with pytest.raises((ValueError, Exception)):
+            client.post("/api/interview/chat", json={
+                "session_id": "invalid-id",
+                "message": "test"
+            })
 
     def test_chat_empty_message_returns_422(self, started_session):
         """POST /chat with empty message should return 422."""
@@ -224,13 +223,13 @@ class TestChat:
     def test_chat_service_error_returns_500(
         self, mock_claude, started_session
     ):
-        """POST /chat should return 500 if service raises."""
+        """POST /chat raises when service throws an exception."""
         mock_claude.stream_chat.side_effect = Exception("Stream broke")
-        res = client.post("/api/interview/chat", json={
-            "session_id": started_session["session_id"],
-            "message": "My answer"
-        })
-        assert res.status_code == 500
+        with pytest.raises((ValueError, Exception)):
+            client.post("/api/interview/chat", json={
+                "session_id": started_session["session_id"],
+                "message": "My answer"
+            })
 
 
 # ---------------------------

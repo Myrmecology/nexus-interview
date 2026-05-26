@@ -3,7 +3,7 @@
 # Defines all request and response data models
 # ============================================================
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 from enum import Enum
 
@@ -29,6 +29,15 @@ class InterviewStatus(str, Enum):
 # ---------------------------
 
 class StartInterviewRequest(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "difficulty": "beginner",
+                "topic": "url shortener"
+            }
+        }
+    )
+
     difficulty: DifficultyLevel = Field(
         default=DifficultyLevel.BEGINNER,
         description="Difficulty level of the interview"
@@ -38,16 +47,17 @@ class StartInterviewRequest(BaseModel):
         description="Optional specific topic to focus on"
     )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "difficulty": "beginner",
-                "topic": "url shortener"
-            }
-        }
-
 
 class ChatRequest(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "session_id": "abc-123",
+                "message": "I would start with an API gateway..."
+            }
+        }
+    )
+
     session_id: str = Field(
         description="Unique session identifier"
     )
@@ -56,14 +66,6 @@ class ChatRequest(BaseModel):
         min_length=1,
         max_length=5000
     )
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "session_id": "abc-123",
-                "message": "I would start with an API gateway..."
-            }
-        }
 
 
 class HintRequest(BaseModel):

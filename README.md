@@ -8,7 +8,7 @@
 
 ## ⚡ Live Demo
 
-![Nexus Interview Screenshot](https://via.placeholder.com/900x500/080b0f/00ffe0?text=NEXUS+INTERVIEW)
+https://www.youtube.com/watch?v=VMo8luXrgw0
 
 ---
 

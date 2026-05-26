@@ -202,7 +202,9 @@ class ClaudeService:
 
         session = sessions[session_id]
 
-        if session["status"] != InterviewStatus.ACTIVE:
+        # Allow streaming for active sessions only
+        # Completed sessions can still be scored
+        if session["status"] == InterviewStatus.ABANDONED:
             raise ValueError("Interview is no longer active.")
 
         # Append user message to history
@@ -237,8 +239,12 @@ class ClaudeService:
         session["turn_count"] += 1
 
         # Auto-complete if max turns reached
+        # Keep session in memory so scoring still works
         if session["turn_count"] >= settings.MAX_CONVERSATION_TURNS:
             session["status"] = InterviewStatus.COMPLETED
+
+        # Always persist session state back to store
+        sessions[session_id] = session
 
     # ---------------------------
     # Get Hint
@@ -289,6 +295,11 @@ class ClaudeService:
 
         session = sessions[session_id]
 
+        # Allow scoring of active and completed sessions
+        # Only block abandoned sessions
+        if session["status"] == InterviewStatus.ABANDONED:
+            raise ValueError("Session was abandoned.")
+
         # Build scoring context
         context = f"""
         System design challenge: {session['question_topic']}
@@ -315,6 +326,7 @@ class ClaudeService:
 
         # Mark session complete
         session["status"] = InterviewStatus.COMPLETED
+        sessions[session_id] = session
 
         return {
             "session_id": session_id,

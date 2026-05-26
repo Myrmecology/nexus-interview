@@ -3,12 +3,35 @@
 # Ties the entire backend together
 # ============================================================
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from backend.config import settings
 from backend.routes.interview import router as interview_router
+
+
+# ---------------------------
+# Lifespan Event Handler
+# ---------------------------
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Runs on app startup and shutdown.
+    Validates all required environment variables
+    before accepting any requests.
+    """
+    try:
+        settings.validate()
+        print(f"✅ {settings.APP_NAME} v{settings.APP_VERSION} is running")
+        print(f"✅ Claude model: {settings.CLAUDE_MODEL}")
+        print(f"✅ Docs available at: http://{settings.HOST}:{settings.PORT}/docs")
+    except ValueError as e:
+        print(f"❌ Startup failed: {e}")
+        raise
+    yield
 
 
 # ---------------------------
@@ -20,7 +43,8 @@ app = FastAPI(
     version=settings.APP_VERSION,
     description="AI-Powered System Design Interview Simulator",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 
@@ -35,27 +59,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-
-# ---------------------------
-# Validate Settings on Startup
-# ---------------------------
-
-@app.on_event("startup")
-async def startup_event():
-    """
-    Runs on app startup.
-    Validates all required environment variables
-    before accepting any requests.
-    """
-    try:
-        settings.validate()
-        print(f"✅ {settings.APP_NAME} v{settings.APP_VERSION} is running")
-        print(f"✅ Claude model: {settings.CLAUDE_MODEL}")
-        print(f"✅ Docs available at: http://{settings.HOST}:{settings.PORT}/docs")
-    except ValueError as e:
-        print(f"❌ Startup failed: {e}")
-        raise
 
 
 # ---------------------------
